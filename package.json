@@ -23,8 +23,6 @@
   "dependencies": {
     "hubot": ">= 2.6.0 < 3.0.0",
     "hubot-scripts": ">= 2.5.0 < 3.0.0",
-"heroku plugins: install htpps://github.com/heroku/heroku-repo.git",
-"heroku repo:rebuild",
     "hubot-hipchat": "~2.7.5"
   },
   "engines": {
