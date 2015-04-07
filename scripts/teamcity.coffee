@@ -17,8 +17,8 @@
 # Author:
 #	 Kevin Van Heusen
 
-util					= require 'util'
-_						= require 'underscore'
+util = require 'util'
+_    = require 'underscore'
 
 console.log "1"
 module.exports = (robot) ->
