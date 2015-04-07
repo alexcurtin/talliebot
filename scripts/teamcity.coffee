@@ -42,7 +42,7 @@ branchProjectMap =
 console.log "4"
 # Deploy the correct builds
 deploy: (msg = {}, map = {}) ->
-console.log "5"		
+console.log "5"
 projectName = msg.match[1]
      if projectName == "all"
          for key, value of map
@@ -54,7 +54,7 @@ projectName = msg.match[1]
 
 # Add to deploy queue
 add2Queue: (msg, projectName, buildId) ->
-console.log "6"		
+console.log "6"
 url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
 headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
 msg.http(url)
@@ -63,12 +63,12 @@ msg.http(url)
 if res.statusCode == 200
 msg.send("Deploying #{projectName}")
 else
-	msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
 return true
 
 # Deploy
 console.log "7"
 robot.respond /deploy (.*)/i, (msg) -> @deploy(msg, @trunkProjectMap)
-console.log "8"	
+console.log "8"
 robot.respond /deploy branch (.*)/i, (msg) -> @deploy(msg, @branchProjectMap)
 console.log "9"
