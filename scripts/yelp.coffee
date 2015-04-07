@@ -1,4 +1,4 @@
-cription:
+#description:
 #   With the Yelp API v2.0, search for nearby restaurants.
 #
 # Dependencies:
