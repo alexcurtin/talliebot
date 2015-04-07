@@ -40,7 +40,7 @@ module.exports = (robot) ->
 		'database': 'branch2'
 
 	# Deploy the correct builds
-	deploy: (msg = {}, map = {}) ->
+	deploy = (msg = {}, map = {}) ->
 		projectName = msg.match[1]
 		if projectName == "all"
 			for key, value of map
@@ -51,7 +51,7 @@ module.exports = (robot) ->
 		return true
 
 	# Add to deploy queue
-	add2Queue: (msg, projectName, buildId) ->
+	add2Queue = (msg, projectName, buildId) ->
 		url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
 		headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
 		msg.http(url)
