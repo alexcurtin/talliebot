@@ -44,10 +44,11 @@ module.exports = (robot) ->
 		projectName = msg.match[1]
 		if projectName == "all"
 			for key, value of map
-				@add2Queue(msg, projectName, value)
+				#@add2Queue(msg, projectName, value)
+				msg.send("#{key} => #{value}")
 		else
 			for key, value of map
-				@add2Queue(msg, projectName, value) if key == projectName
+				#@add2Queue(msg, projectName, value) if key == projectName
 		return true
 
 	# Add to deploy queue
