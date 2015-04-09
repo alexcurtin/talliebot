@@ -63,6 +63,6 @@ module.exports = (robot) ->
 
   # Deploy
   robot.respond /deploy (.*)/i, (msg) ->
-    @deploy(msg, @trunkProjectMap)
+    deploy(msg, trunkProjectMap)
   robot.respond /deploy branch (.*)/i, (msg) ->
-    @deploy(msg, @branchProjectMap)
+    deploy(msg, branchProjectMap)
