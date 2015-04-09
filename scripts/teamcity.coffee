@@ -38,7 +38,7 @@ module.exports = (robot) ->
       'db': 'branch2'
       'database': 'branch2'
   # Deploy the correct builds
-  deploy: (msg = {}, map = {}) ->
+  deploy = (msg = {}, map = {}) ->
       projectName = msg.match[1]
       if projectName == "all"
           for key, value of map
