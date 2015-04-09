@@ -29,9 +29,9 @@ module.exports = (robot) ->
   base_url = "#{scheme}://#{hostname}"
   # trunk TC deploy projects - map of friendly alias to TC build ID
   trunkProjectMap =
-      'cloud': 'bt88'
-      'db': 'bt89'
-      'database': 'bt89'
+      'cloud': 'bt8888'
+      'db': 'bt8988'
+      'database': 'bt8988'
   # branch TC deploy projects - map of friendly alias to TC build ID
   branchProjectMap =
       'cloud': 'branch1'
