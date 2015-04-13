@@ -38,7 +38,7 @@ module.exports = (robot) ->
       'db': 'bt89111'
 
     if query == "all"
-      console.log "deploy all (disabled)"
+      console.log "deploy trunk all (disabled)"
       ###
       for projectName, buildId of map
         console.log "deploy", projectName, buildId
@@ -49,21 +49,21 @@ module.exports = (robot) ->
           .get() (err, res, body) ->
            if res.statusCode == 200
               msg.send("Deploying #{projectName}")
-            else
+            elset
               msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
       ###
     else
       buildId = map[query]
       projectName = query
       if projectName? and buildId?
-        console.log "deploy", projectName, buildId
+        console.log "deploy trunk", projectName, buildId
         url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
         headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
         msg.http(url)
           .headers(headers)
           .get() (err, res, body) ->
             if res.statusCode == 200
-              msg.send("Deploying #{projectName}")
+              msg.send("Deploying #{projectName} from trunk.")
             else
               msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
     return true
@@ -100,14 +100,14 @@ module.exports = (robot) ->
       buildId = map[query]
       projectName = query
       if projectName? and buildId?
-        console.log "deploy", projectName, buildId
+        console.log "deploy branch", projectName, buildId
         url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
         headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
         msg.http(url)
           .headers(headers)
           .get() (err, res, body) ->
             if res.statusCode == 200
-              msg.send("Deploying #{projectName}")
+              msg.send("Deploying #{projectName} from branch.")
             else
               msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
     return true
