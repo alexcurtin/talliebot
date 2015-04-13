@@ -30,7 +30,7 @@ module.exports = (robot) ->
     
 
     projectId = buildMappings[buildId]
-console.log "1"
+    console.log "1"
     msg.http("http://#{hostname}/httpAuth/action.html?add2Queue=#{buildId}")
      .headers(Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json")
      .get() (err, res, body) ->
