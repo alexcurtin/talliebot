@@ -44,21 +44,27 @@ module.exports = (robot) ->
         headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
         msg.http(url)
           .headers(headers)
-          .get() (err, res, body, projectName = projectName, buildId = buildId) ->
-            if res.statusCode == 200
+          .get() (err, res, body) ->
+            msg.send util.inspect(err)
+            msg.send util.inspect(res)
+            msg.send util.inspect(body)
+           if res.statusCode == 200
               msg.send("Deploying #{projectName}")
             else
               msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
     else
       buildId = map[query]
       projectName = query
-      if projectName? or buildId?
+      if projectName? and buildId?
         console.log "deploy", projectName, buildId
         url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
         headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
         msg.http(url)
           .headers(headers)
-          .get() (err, res, body, projectName = projectName, buildId = buildId) ->
+          .get() (err, res, body) ->
+            msg.send util.inspect(err)
+            msg.send util.inspect(res)
+            msg.send util.inspect(body)
             if res.statusCode == 200
               msg.send("Deploying #{projectName}")
             else
@@ -78,14 +84,17 @@ module.exports = (robot) ->
       'db': 'branch2'
 
     if query == "all"
-      console.log "deploy all"
+      console.log "deploy branch all"
       for projectName, buildId of map
         console.log "deploy", projectName, buildId
         url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
         headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
         msg.http(url)
           .headers(headers)
-          .get() (err, res, body, projectName = projectName, buildId = buildId) ->
+          .get() (err, res, body) ->
+            msg.send util.inspect(err)
+            msg.send util.inspect(res)
+            msg.send util.inspect(body)
             if res.statusCode == 200
               msg.send("Deploying #{projectName}")
             else
@@ -93,13 +102,16 @@ module.exports = (robot) ->
     else
       buildId = map[query]
       projectName = query
-      if projectName? or buildId?
+      if projectName? and buildId?
         console.log "deploy", projectName, buildId
         url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
         headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
         msg.http(url)
           .headers(headers)
-          .get() (err, res, body, projectName = projectName, buildId = buildId) ->
+          .get() (err, res, body) ->
+            msg.send util.inspect(err)
+            msg.send util.inspect(res)
+            msg.send util.inspect(body)
             if res.statusCode == 200
               msg.send("Deploying #{projectName}")
             else
