@@ -30,8 +30,8 @@ module.exports = (robot) ->
     
 
     projectId = buildMappings[buildId]
-
-    msg.http("http://#{hostname}/httpAuth/action.html?add2Queue=#{projectId}")
+console.log "1"
+    msg.http("http://#{hostname}/httpAuth/action.html?add2Queue=#{buildId}")
      .headers(Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json")
      .get() (err, res, body) ->
         if res.statusCode == 200
