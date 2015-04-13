@@ -21,49 +21,85 @@ util					= require 'util'
 _						= require 'underscore'
 
 module.exports = (robot) ->
-	username = process.env.HUBOT_TEAMCITY_USERNAME
-	password = process.env.HUBOT_TEAMCITY_PASSWORD
-	hostname = process.env.HUBOT_TEAMCITY_HOSTNAME
-	scheme = process.env.HUBOT_TEAMCITY_SCHEME || "http"
-	base_url = "#{scheme}://#{hostname}"
-
-	# trunk TC deploy projects - map of friendly alias to TC build ID
-	trunkProjectMap =
-		'cloud': 'bt88'
-		'db': 'bt89'
-		'database': 'bt89'
-
-	# branch TC deploy projects - map of friendly alias to TC build ID
-	branchProjectMap =
-		'cloud': 'branch1'
-		'db': 'branch2'
-		'database': 'branch2'
-
-	# Deploy the correct builds
-	deploy: (msg = {}, map = {}) ->
-		projectName = msg.match[1]
-		if projectName == "all"
-			for key, value of map
-				@add2Queue(msg, projectName, value)
-		else
-			for key, value of map
-				@add2Queue(msg, projectName, value) if key == projectName
-		return true
-
-	# Add to deploy queue
-	add2Queue: (msg, projectName, buildId) ->
-		url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
-		headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
-		msg.http(url)
-			.headers(headers)
-			.get() (err, res, body) ->
-				if res.statusCode == 200
-					msg.send("Deploying #{projectName}")
-				else
-					msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
-		return true
 
 	# Deploy
-	robot.respond /deploy (.*)/i, (msg) => @deploy(msg, @trunkProjectMap)
-	robot.respond /deploy branch (.*)/i, (msg) => @deploy(msg, @branchProjectMap)
+	robot.respond /deploy (.*)/i, (msg) -> 
+		username = process.env.HUBOT_TEAMCITY_USERNAME
+		password = process.env.HUBOT_TEAMCITY_PASSWORD
+		hostname = process.env.HUBOT_TEAMCITY_HOSTNAME
+		scheme = process.env.HUBOT_TEAMCITY_SCHEME || "http"
+		base_url = "#{scheme}://#{hostname}"
+		
+		projectName = msg.match[1]
 
+		map =
+			'cloud': 'bt8811'
+			'db': 'bt89111'
+			'database': 'bt89111'
+
+		if projectName == "all"
+			console.log "deploy all"
+			for projectName, buildId of map
+				console.log "deploy ", projectName, buildId
+				url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
+				headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
+				msg.http(url)
+					.headers(headers)
+					.get() (err, res, body) ->
+						if res.statusCode == 200
+							msg.send("Deploying #{projectName}")
+						else
+							msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+		else
+			buildId = map[projectName]
+			console.log "deploy", projectName, buildId
+			url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
+			headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
+			msg.http(url)
+				.headers(headers)
+				.get() (err, res, body) ->
+					if res.statusCode == 200
+						msg.send("Deploying #{projectName}")
+					else
+						msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+		return true
+	
+	robot.respond /deploy branch (.*)/i, (msg) -> 
+		username = process.env.HUBOT_TEAMCITY_USERNAME
+		password = process.env.HUBOT_TEAMCITY_PASSWORD
+		hostname = process.env.HUBOT_TEAMCITY_HOSTNAME
+		scheme = process.env.HUBOT_TEAMCITY_SCHEME || "http"
+		base_url = "#{scheme}://#{hostname}"
+		projectName = msg.match[1]
+
+		map =
+			'cloud': 'branch1'
+			'db': 'branch2'
+			'database': 'branch2'
+
+		if projectName == "all"
+			console.log "deploy all"
+			for projectName, buildId of map
+				console.log "deploy ", projectName, buildId
+				url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
+				headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
+				msg.http(url)
+					.headers(headers)
+					.get() (err, res, body) ->
+						if res.statusCode == 200
+							msg.send("Deploying #{projectName}")
+						else
+							msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+		else
+			buildId = map[projectName]
+			console.log "deploy", projectName, buildId
+			url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
+			headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
+			msg.http(url)
+				.headers(headers)
+				.get() (err, res, body) ->
+					if res.statusCode == 200
+						msg.send("Deploying #{projectName}")
+					else
+						msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+		return true
