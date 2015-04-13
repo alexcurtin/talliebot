@@ -25,8 +25,8 @@ module.exports = (robot) ->
     buildId = msg.match[1]
     
     buildMappings = 
-     'web': 'bt38' 
-      'database': 'bt38' # put real project ids here
+     "web": "bt38" 
+      "database": "bt38" # put real project ids here
     
 
     projectId = buildMappings[buildId]
