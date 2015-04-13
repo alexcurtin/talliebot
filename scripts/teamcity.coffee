@@ -26,12 +26,12 @@ module.exports = (robot) ->
     
     buildMappings = 
      "web": "bt38" 
-      "database": "bt38" # put real project ids here
+     "database": "bt38" # put real project ids here
     
 
     projectId = buildMappings[buildId]
     console.log "1"
-    msg.http("http://#{hostname}/httpAuth/action.html?add2Queue=#{buildId}")
+    msg.http("http://#{hostname}/httpAuth/action.html?add2Queue=#{projectId}")
      .headers(Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json")
      .get() (err, res, body) ->
         if res.statusCode == 200
