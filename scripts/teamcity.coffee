@@ -30,7 +30,7 @@ module.exports = (robot) ->
 		scheme = process.env.HUBOT_TEAMCITY_SCHEME || "http"
 		base_url = "#{scheme}://#{hostname}"
 		
-		projectName = msg.match[1]
+		query = msg.match[1]
 
 		map =
 			'cloud': 'bt8811'
