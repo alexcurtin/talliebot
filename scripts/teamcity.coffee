@@ -44,12 +44,11 @@ module.exports = (robot) ->
         headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
         msg.http(url)
           .headers(headers)
-          .get() (err, res, body) =>
-            console.log "body", body
+          .get() (err, res, body, projectName = projectName, buildId = buildId) ->
             if res.statusCode == 200
-              msg.send("Deploying", projectName)
+              msg.send("Deploying #{projectName}")
             else
-              msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is", buildId)
+              msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
     else
       buildId = map[query]
       projectName = query
@@ -59,12 +58,11 @@ module.exports = (robot) ->
         headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
         msg.http(url)
           .headers(headers)
-          .get() (err, res, body) =>
-            console.log "body", body
+          .get() (err, res, body, projectName = projectName, buildId = buildId) ->
             if res.statusCode == 200
-              msg.send("Deploying", projectName)
+              msg.send("Deploying #{projectName}")
             else
-              msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is", buildId)
+              msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
     return true
 
   robot.respond /deploy branch (.*)/i, (msg) ->
@@ -87,12 +85,11 @@ module.exports = (robot) ->
         headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
         msg.http(url)
           .headers(headers)
-          .get() (err, res, body) =>
-            console.log "body", body
+          .get() (err, res, body, projectName = projectName, buildId = buildId) ->
             if res.statusCode == 200
-              msg.send("Deploying", projectName)
+              msg.send("Deploying #{projectName}")
             else
-              msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is", buildId)
+              msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
     else
       buildId = map[query]
       projectName = query
@@ -102,10 +99,9 @@ module.exports = (robot) ->
         headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
         msg.http(url)
           .headers(headers)
-          .get() (err, res, body) =>
-            console.log "body", body
+          .get() (err, res, body, projectName = projectName, buildId = buildId) ->
             if res.statusCode == 200
-              msg.send("Deploying", projectName)
+              msg.send("Deploying #{projectName}")
             else
-              msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is", buildId)
+              msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
     return true
