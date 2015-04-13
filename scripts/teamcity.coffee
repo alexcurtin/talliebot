@@ -33,7 +33,7 @@ module.exports = (robot) ->
     buildId = msg.match[1]
     
     url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
-    headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toSring("base64")}", Accept: "application/json"
+    headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
     msg.http(url)
     .headers(headers)
     .get() (err, res, body) ->
