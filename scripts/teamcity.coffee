@@ -24,10 +24,10 @@ module.exports = (robot) ->
     hostname = process.env.HUBOT_TEAMCITY_HOSTNAME
     buildId = msg.match[1]
     
-    buildMappings = {
+    buildMappings = 
      ' web': 'bt38', 
       'database': 'bt38' # put real project ids here
-    }
+    
 
     projectId = buildMappings[buildId]
 
