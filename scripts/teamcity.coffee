@@ -32,12 +32,14 @@ module.exports = (robot) ->
 
     query = msg.match[1]
 
+    # TRUNK PROJECT MAPPING
     map =
       'cloud': 'bt8811'
       'db': 'bt89111'
 
     if query == "all"
-      console.log "deploy all"
+      console.log "deploy all (disabled)"
+      ###
       for projectName, buildId of map
         console.log "deploy", projectName, buildId
         url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
@@ -45,13 +47,11 @@ module.exports = (robot) ->
         msg.http(url)
           .headers(headers)
           .get() (err, res, body) ->
-            msg.send util.inspect(err)
-            msg.send util.inspect(res)
-            msg.send util.inspect(body)
            if res.statusCode == 200
               msg.send("Deploying #{projectName}")
             else
               msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+      ###
     else
       buildId = map[query]
       projectName = query
@@ -62,9 +62,6 @@ module.exports = (robot) ->
         msg.http(url)
           .headers(headers)
           .get() (err, res, body) ->
-            msg.send util.inspect(err)
-            msg.send util.inspect(res)
-            msg.send util.inspect(body)
             if res.statusCode == 200
               msg.send("Deploying #{projectName}")
             else
@@ -79,12 +76,14 @@ module.exports = (robot) ->
     base_url = "#{scheme}://#{hostname}"
     query = msg.match[1]
 
+    # BRANCH PROJECT MAPPING
     map =
       'cloud': 'branch1'
       'db': 'branch2'
 
     if query == "all"
-      console.log "deploy branch all"
+      console.log "deploy branch all (disabled)"
+      ###
       for projectName, buildId of map
         console.log "deploy", projectName, buildId
         url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
@@ -92,13 +91,11 @@ module.exports = (robot) ->
         msg.http(url)
           .headers(headers)
           .get() (err, res, body) ->
-            msg.send util.inspect(err)
-            msg.send util.inspect(res)
-            msg.send util.inspect(body)
             if res.statusCode == 200
               msg.send("Deploying #{projectName}")
             else
               msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+      ###
     else
       buildId = map[query]
       projectName = query
@@ -109,9 +106,6 @@ module.exports = (robot) ->
         msg.http(url)
           .headers(headers)
           .get() (err, res, body) ->
-            msg.send util.inspect(err)
-            msg.send util.inspect(res)
-            msg.send util.inspect(body)
             if res.statusCode == 200
               msg.send("Deploying #{projectName}")
             else
