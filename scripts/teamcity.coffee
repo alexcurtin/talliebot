@@ -46,21 +46,23 @@ module.exports = (robot) ->
 					.headers(headers)
 					.get() (err, res, body) =>
 						if res.statusCode == 200
-							msg.send("Deploying" + projectName)
+							msg.send("Deploying", projectName)
 						else
-							msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is" + buildId)
-		else if query?
+							msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is", buildId)
+		else
 			buildId = map[query]
-			console.log "deploy", projectName, buildId
-			url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
-			headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
-			msg.http(url)
-				.headers(headers)
-				.get() (err, res, body) =>
-					if res.statusCode == 200
-						msg.send("Deploying" + projectName)
-					else
-						msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is" + buildId)
+			projectName = query
+			if projectName? or buildId?
+				console.log "deploy", projectName, buildId
+				url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
+				headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
+				msg.http(url)
+					.headers(headers)
+					.get() (err, res, body) =>
+						if res.statusCode == 200
+							msg.send("Deploying", projectName)
+						else
+							msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is", buildId)
 		return true
 			
 	robot.respond /deploy branch (.*)/i, (msg) -> 
@@ -85,19 +87,21 @@ module.exports = (robot) ->
 					.headers(headers)
 					.get() (err, res, body) =>
 						if res.statusCode == 200
-							msg.send("Deploying" + projectName)
+							msg.send("Deploying", projectName)
 						else
-							msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is" + buildId)
-		else if query?
+							msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is", buildId)
+		else
 			buildId = map[query]
-			console.log "deploy", projectName, buildId
-			url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
-			headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
-			msg.http(url)
-				.headers(headers)
-				.get() (err, res, body) =>
-					if res.statusCode == 200
-						msg.send("Deploying" + projectName)
-					else
-						msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is" + buildId)
+			projectName = query
+			if projectName? or buildId?
+				console.log "deploy", projectName, buildId
+				url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
+				headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
+				msg.http(url)
+					.headers(headers)
+					.get() (err, res, body) =>
+						if res.statusCode == 200
+							msg.send("Deploying", projectName)
+						else
+							msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is", buildId)
 		return true
