@@ -16,4 +16,4 @@
 
 module.exports = (robot) ->
   robot.respond /take the blame/i, (msg) ->
-    talliebot shamefully sits there and silently takes the blame.
+   msg.send "talliebot shamefully sits there and silently takes the blame."
