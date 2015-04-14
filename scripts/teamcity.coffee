@@ -81,8 +81,11 @@ module.exports = (robot) ->
 
     # BRANCH PROJECT MAPPING
     map =
-      'cloud': 'branch1'
-      'db': 'branch2'
+      'cloud': 'DeployBranch_DeployTallieCloud'
+      'db': 'DeployBranch_DeployTallieDb'
+      'marketing': 'DeployBranch_DeployMarketing'
+      'web': 'DeployBranch_DeployTallieWeb'
+      'viselde': 'DeployBranch_DeployViseldeAlpha'
 
     if query == "all"
       console.log "deploy branch all (disabled)"
