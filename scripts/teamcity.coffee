@@ -51,9 +51,9 @@ module.exports = (robot) ->
           .headers(headers)
           .get() (err, res, body) ->
            if res.statusCode == 200
-              msg.send("Deploying #{projectName}")
+              msg.send("/me is deploying #{projectName} from trunk.")
             elset
-              msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+              msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
       ###
     else
       buildId = map[query]
@@ -66,9 +66,9 @@ module.exports = (robot) ->
           .headers(headers)
           .get() (err, res, body) ->
             if res.statusCode == 200
-              msg.send("Deploying #{projectName} from trunk.")
+              msg.send("/me is deploying #{projectName} from trunk.")
             else
-              msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+              msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
     return true
 
   robot.respond /deploy branch (.*)/i, (msg) ->
@@ -98,9 +98,9 @@ module.exports = (robot) ->
           .headers(headers)
           .get() (err, res, body) ->
             if res.statusCode == 200
-              msg.send("Deploying #{projectName}")
+              msg.send("/me is deploying #{projectName} from branch.")
             else
-              msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+              msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
       ###
     else
       buildId = map[query]
@@ -113,7 +113,7 @@ module.exports = (robot) ->
           .headers(headers)
           .get() (err, res, body) ->
             if res.statusCode == 200
-              msg.send("Deploying #{projectName} from branch.")
+              msg.send("/me is deploying #{projectName} from branch.")
             else
-              msg.send("Fail! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+              msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
     return true
