@@ -40,6 +40,12 @@ module.exports = (robot) ->
       "What did I do wrong again?"
     ,
       "Okay, I will bring (donuts)"
+    ,
+      "(sadpanda)"
+    ,
+      "(areyoukiddingme)"
+    ,
+      "(tableflip)"
     ]
     blame = blames[Math.floor( Math.random() * blames.length)]
     msg.send blame
