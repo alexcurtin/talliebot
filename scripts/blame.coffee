@@ -38,6 +38,8 @@ module.exports = (robot) ->
       "It's always my fault, isn't it?"
     ,
       "What did I do wrong again?"
+    ,
+      "Well I guess I'll have to bring (donuts)"
     ]
     blame = blames[Math.floor( Math.random() * blames.length)]
     msg.send blame
