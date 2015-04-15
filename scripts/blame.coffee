@@ -33,13 +33,13 @@ module.exports = (robot) ->
     ,
       "I've done enough wrong on my own, I don't want to get blamed for something I didn't do."
     ,
-      "I'm sorry. It's my fault. That can I do to make it right?"
+      "I'm sorry. It's my fault. What can I do to make it right?"
     ,
       "It's always my fault, isn't it?"
     ,
       "What did I do wrong again?"
     ,
-      "Well I guess I'll have to bring (donuts)"
+      "Okay, I will bring (donuts)"
     ]
     blame = blames[Math.floor( Math.random() * blames.length)]
     msg.send blame
