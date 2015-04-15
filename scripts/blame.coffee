@@ -16,4 +16,10 @@
 
 module.exports = (robot) ->
   robot.respond /take the blame/i, (msg) ->
-   msg.send "talliebot shamefully sits there and silently takes the blame."
+    blames = [
+      "/me shamefully sits there and silently takes the blame."
+    ,
+      "Oscar Wilde told me to do it!"
+    ]
+    blame = blames[Math.floor( Math.random() * blames.length)]
+    msg.send blame
