@@ -34,8 +34,11 @@ module.exports = (robot) ->
 
     # TRUNK PROJECT MAPPING
     map =
-      'cloud': 'bt8811'
-      'db': 'bt89111'
+      'cloud': 'bt88'
+      'db': 'bt89'
+      'marketing': 'bt102'
+      'web': 'bt87'
+      'viselde': 'Deploy_DeployViseldeAlpha'
 
     if query == "all"
       console.log "deploy trunk all (disabled)"
@@ -78,8 +81,11 @@ module.exports = (robot) ->
 
     # BRANCH PROJECT MAPPING
     map =
-      'cloud': 'branch1'
-      'db': 'branch2'
+      'cloud': 'DeployBranch_DeployTallieCloud'
+      'db': 'DeployBranch_DeployTallieDb'
+      'marketing': 'DeployBranch_DeployMarketing'
+      'web': 'DeployBranch_DeployTallieWeb'
+      'viselde': 'DeployBranch_DeployViseldeAlpha'
 
     if query == "all"
       console.log "deploy branch all (disabled)"
