@@ -21,7 +21,7 @@ module.exports = (robot) ->
 
   robot.respond /(.*) owes donuts/i, (msg) ->
     name = msg.match[1].trim
-    users = robot.brain.usersForFuzzyName name
+    users = robot.brain.usersForFuzzyName(name)
     if users.length is 1
       user = users[0]
       userDonutsString = user + donutStringSuffix
@@ -34,7 +34,7 @@ module.exports = (robot) ->
 
   robot.respond /(.*) brought donuts/i, (msg) ->
     name = msg.match[1].trim
-    users = robot.brain.usersForFuzzyName name
+    users = robot.brain.usersForFuzzyName(name)
     if users.length is 1
       user = users[0]
       userDonutsString = user + donutStringSuffix
@@ -51,7 +51,7 @@ module.exports = (robot) ->
 
   robot.respond /Does (.*) owe donuts/i, (msg) ->
     name = msg.match[1].trim
-    users = robot.brain.usersForFuzzyName name
+    users = robot.brain.usersForFuzzyName(name)
     if users.length is 1
       user = users[0]
       userDonutsString = user + donutStringSuffix
