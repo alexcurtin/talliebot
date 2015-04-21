@@ -127,7 +127,7 @@ module.exports = (robot) ->
         return true
 
     # DEPLOY HELP
-    robot.respond /deploy help, (msg) ->
+    robot.respond /deploy help (.*)/i, (msg) ->
         help = ""
         for projectName, buildId of trunkMap
             help = "deploy " + projectName + "\n"
