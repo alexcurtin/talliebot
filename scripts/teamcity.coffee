@@ -11,14 +11,17 @@
 #     HUBOT_TEAMCITY_SCHEME = <http || https> defaults to http if not set.
 #
 # Commands:
-#     hubot deploy <project> - Deploy project named <project>
-#     hubot deploy branch <project> - Deploy branch project named <project>
+#     hubot deploy all - Deploy all projects from trunk
+#     hubot deploy <project> - Deploy project named <project> from trunk
+#     hubot deploy branch all - Deploy all projects from branch
+#     hubot deploy branch <project> - Deploy project named <project> from branch
+#     hubot deploy help - List all available projects
 #
 # Author:
 #     Kevin Van Heusen
 
 util = require 'util'
-_        = require 'underscore'
+_ = require 'underscore'
 
 module.exports = (robot) ->
 
@@ -46,6 +49,7 @@ module.exports = (robot) ->
         'bb': '22'
         'cc': '33'
 
+    # ADD PROJECT 2 QUEUE
     add2Queue = (msg, projectName, buildId, env) =>
         console.log "add2Queue", projectName, buildId, env
 
@@ -68,7 +72,7 @@ module.exports = (robot) ->
                     msg.send("/me cannot start the build for some reason. Build Id is #{buildId}.")
         return true
 
-    # DEPLOY TRUNK
+    # RESPOND TO DEPLOY TRUNK
     robot.respond /deploy (.*)/i, (msg) ->
         query = msg.match[1]
 
@@ -86,7 +90,7 @@ module.exports = (robot) ->
         return true
 
 
-    # DEPLOY BRANCH
+    # RESPOND TO DEPLOY BRANCH
     robot.respond /deploy branch (.*)/i, (msg) ->
         query = msg.match[1]
 
@@ -101,7 +105,7 @@ module.exports = (robot) ->
 
         return true
 
-    # DEPLOY HELP
+    # RESPOND TO DEPLOY HELP
     robot.respond /deploy help/i, (msg) ->
         help = ""
         help += "deploy all \n"
