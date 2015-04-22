@@ -40,6 +40,11 @@ module.exports = (robot) ->
         'viselde': 'DeployBranch_DeployViseldeAlpha'
         'test': '0'
 
+    testMap =
+        'aa': '11'
+        'bb': '22'
+        'cc': '33'
+
     # DEPLOY
     robot.respond /deploy (.*)/i, (msg) ->
         username = process.env.HUBOT_TEAMCITY_USERNAME
@@ -50,37 +55,40 @@ module.exports = (robot) ->
 
         query = msg.match[1]
 
-        if query == "all"
-            console.log "deploy trunk all (disabled)"
-            ###
-            for projectName, buildId of trunkMap
-                console.log "deploy", projectName, buildId
-                url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
-                headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
-                msg.http(url)
-                    .headers(headers)
-                    .get() (err, res, body) ->
-                     if res.statusCode == 200
-                            msg.send("/me is deploying #{projectName} from trunk.")
-                        elset
-                            msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
-            ###
-        else
-            buildId = trunkMap[query]
-            projectName = query
-            if projectName? and buildId?
-                console.log "deploy trunk", projectName, buildId
-                url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
-                headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
-                msg.http(url)
-                    .headers(headers)
-                    .get() (err, res, body) ->
-                        if res.statusCode == 200
-                            msg.send("/me is deploying #{projectName} from trunk.")
-                        else
-                            msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+        # only process messages that are for trunk
+        if query.indexOf("branch") > -1 and query.indexOf("help") > -1
+
+            if query == "all"
+                ###
+                console.log "deploy trunk all (disabled)"
+                for projectName, buildId of testMap
+                    console.log "deploy", projectName, buildId
+                    url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
+                    headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
+                    msg.http(url)
+                        .headers(headers)
+                        .get() (err, res, body) ->
+                         if res.statusCode == 200
+                                msg.send("/me is deploying #{projectName} from trunk.")
+                            elset
+                                msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+                ###
             else
-                msg.send("/me cannot find project '#{projectName}'")
+                buildId = trunkMap[query]
+                projectName = query
+                if projectName? and buildId?
+                    console.log "deploy trunk", projectName, buildId
+                    url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
+                    headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
+                    msg.http(url)
+                        .headers(headers)
+                        .get() (err, res, body) ->
+                            if res.statusCode == 200
+                                msg.send("/me is deploying #{projectName} from trunk.")
+                            else
+                                msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+                else
+                    msg.send("/me cannot find project '#{projectName}'")
         return true
 
 
@@ -123,16 +131,16 @@ module.exports = (robot) ->
                         else
                             msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
             else
-                msg.send("/me cannot find project '#{projectName}'")
+                msg.send("/me cannot find project 'branch #{projectName}'")
         return true
 
     # DEPLOY HELP
-    robot.respond /deploy help (.*)/i, (msg) ->
+    robot.respond /deploy help/i, (msg) ->
         help = ""
         for projectName, buildId of trunkMap
-            help = "deploy " + projectName + "\n"
+            help += "deploy " + projectName + "\n"
         for projectName, buildId of branchMap
-            help = "deploy branch " + projectName + "\n"
+            help += "deploy branch " + projectName + "\n"
 
         msg.send("/quote " + help)
         return true
