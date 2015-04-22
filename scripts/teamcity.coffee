@@ -12,17 +12,17 @@
 #
 # Commands:
 #     hubot deploy all - Deploy all projects from trunk
-#     hubot deploy cloud - Deploy cloud services from trunk
+#     hubot deploy cloud - Deploy cloud from trunk
 #     hubot deploy db - Deploy database from trunk
 #     hubot deploy marketing - Deploy marketing from trunk
 #     hubot deploy web - Deploy web from trunk
-#     hubot deploy viselde - Deploy viselde services from trunk
+#     hubot deploy viselde - Deploy viselde from trunk
 #     hubot deploy branch all - Deploy all projects from branch
-#     hubot deploy branch cloud - Deploy cloud services from branch
+#     hubot deploy branch cloud - Deploy cloud from branch
 #     hubot deploy branch db - Deploy database from branch
 #     hubot deploy branch marketing - Deploy marketing from branch
 #     hubot deploy branch web - Deploy web from branch
-#     hubot deploy branch viselde - Deploy viselde services from branch
+#     hubot deploy branch viselde - Deploy viselde from branch
 #
 # Author:
 #     Kevin Van Heusen
@@ -39,7 +39,6 @@ module.exports = (robot) ->
         'marketing': 'bt102'
         'web': 'bt87'
         'viselde': 'Deploy_DeployViseldeAlpha'
-        'test': '0' # FIXME: remove this
 
     # BRANCH PROJECT MAPPING
     branchMap =
@@ -48,13 +47,6 @@ module.exports = (robot) ->
         'marketing': 'DeployBranch_DeployMarketing'
         'web': 'DeployBranch_DeployTallieWeb'
         'viselde': 'DeployBranch_DeployViseldeAlpha'
-        'test': '0' # FIXME: remove this
-
-    # FIXME: remove this
-    testMap =
-        'aa': '11'
-        'bb': '22'
-        'cc': '33'
 
     # ADD PROJECT 2 QUEUE
     add2Queue = (msg, projectName, buildId, env) =>
@@ -91,10 +83,10 @@ module.exports = (robot) ->
         else
             map = trunkMap
             env = "trunk"
-        msg.send("Console: isBranch" + isBranch + "query" + query + "env" + env)
+        console.log("deploy: isBranch " + isBranch + " query " + query + " env " + env)
 
         if query == "all"
-            for projectName, buildId of testMap # FIXME: set it to map
+            for projectName, buildId of map
                 add2Queue(msg, projectName, buildId, env)
         else
             if (projectName = query)? and (buildId = map[query])?
