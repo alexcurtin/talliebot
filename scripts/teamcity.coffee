@@ -85,13 +85,13 @@ module.exports = (robot) ->
 
         isBranch = query.match(/branch (.*)/i)?
         if isBranch
-            query = isBranch[1]
+            query = query.replace(/^branch /g, '')
             map = branchMap
             env = "branch"
         else
             map = trunkMap
             env = "trunk"
-        msg.send("Console: isBranch?", isBranch, "query", query, "env", env)
+        msg.send("Console: isBranch" + isBranch + "query" + query + "env" + env)
 
         if query == "all"
             for projectName, buildId of testMap # FIXME: set it to map
