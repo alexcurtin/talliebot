@@ -65,7 +65,7 @@ module.exports = (robot) ->
                 if res.statusCode == 200
                     msg.send("/me is deploying #{projectName} from #{env}.")
                 else
-                    msg.send("/me could not start the build for some reason. Build Id is #{buildId}")
+                    msg.send("/me cannot start the build for some reason. Build Id is #{buildId}.")
         return true
 
     # DEPLOY TRUNK
@@ -74,7 +74,7 @@ module.exports = (robot) ->
 
         isDeployBranch = query.indexOf "branch" > -1
         isDeployHelp = query.indexOf "help" > -1
-        if !isDeployBranch and !isDeployHelp
+        if !isDeployBranch or !isDeployHelp
             if query == "all"
                 for projectName, buildId of testMap # FIXME: set it to actual map
                     add2Queue(msg, projectName, buildId, env = "trunk")
@@ -104,11 +104,11 @@ module.exports = (robot) ->
     # DEPLOY HELP
     robot.respond /deploy help/i, (msg) ->
         help = ""
+        help += "deploy all \n"
         for projectName, buildId of trunkMap
-            help += "deploy all \n"
             help += "deploy " + projectName + "\n"
+        help += "deploy branch all \n"
         for projectName, buildId of branchMap
-            help += "deploy branch all \n"
             help += "deploy branch " + projectName + "\n"
         msg.send("/quote " + help)
         return true
