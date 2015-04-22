@@ -74,7 +74,7 @@ module.exports = (robot) ->
 
         isDeployBranch = query.indexOf "branch" > -1
         isDeployHelp = query.indexOf "help" > -1
-        if !isDeployBranch or !isDeployHelp
+        if !(isDeployBranch or isDeployHelp)
             if query == "all"
                 for projectName, buildId of testMap # FIXME: set it to actual map
                     add2Queue(msg, projectName, buildId, env = "trunk")
