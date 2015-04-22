@@ -76,9 +76,9 @@ module.exports = (robot) ->
     robot.respond /deploy (.*)/i, (msg) ->
         query = msg.match[1]
 
-        isDeployBranch = query.indexOf "branch" > -1
-        isDeployHelp = query.indexOf "help" > -1
-        if !(isDeployBranch or isDeployHelp)
+        isDeployBranch = query.indexOf("branch") > -1
+        isDeployHelp = query.indexOf("help") > -1
+        if isDeployBranch && !isDeployHelp
             if query == "all"
                 for projectName, buildId of testMap # FIXME: set it to actual map
                     add2Queue(msg, projectName, buildId, env = "trunk")
@@ -108,11 +108,11 @@ module.exports = (robot) ->
     # RESPOND TO DEPLOY HELP
     robot.respond /deploy help/i, (msg) ->
         help = ""
-        help += "deploy all \n"
+        help += "talliebot deploy all \n"
         for projectName, buildId of trunkMap
-            help += "deploy " + projectName + "\n"
-        help += "deploy branch all \n"
+            help += "talliebot deploy " + projectName + "\n"
+        help += "talliebot deploy branch all \n"
         for projectName, buildId of branchMap
-            help += "deploy branch " + projectName + "\n"
-        msg.send("/quote " + help)
+            help += "talliebot deploy branch " + projectName + "\n"
+        msg.send(help)
         return true
