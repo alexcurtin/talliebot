@@ -29,7 +29,7 @@ module.exports = (robot) ->
         'marketing': 'bt102'
         'web': 'bt87'
         'viselde': 'Deploy_DeployViseldeAlpha'
-        'test': '0'
+        'test': '0' # FIXME: remove this
 
     # BRANCH PROJECT MAPPING
     branchMap =
@@ -38,55 +38,49 @@ module.exports = (robot) ->
         'marketing': 'DeployBranch_DeployMarketing'
         'web': 'DeployBranch_DeployTallieWeb'
         'viselde': 'DeployBranch_DeployViseldeAlpha'
-        'test': '0'
+        'test': '0' # FIXME: remove this
 
+    # FIXME: remove this
     testMap =
         'aa': '11'
         'bb': '22'
         'cc': '33'
 
-    # DEPLOY
-    robot.respond /deploy (.*)/i, (msg) ->
+    add2Queue = (msg, projectName, buildId, env) =>
+        console.log "add2Queue", projectName, buildId, env
+
         username = process.env.HUBOT_TEAMCITY_USERNAME
         password = process.env.HUBOT_TEAMCITY_PASSWORD
         hostname = process.env.HUBOT_TEAMCITY_HOSTNAME
         scheme = process.env.HUBOT_TEAMCITY_SCHEME || "http"
         base_url = "#{scheme}://#{hostname}"
+        url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
+        headers =
+            Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}"
+            Accept: "application/json"
 
+        msg.http(url)
+            .headers(headers)
+            .get() (err, res, body) ->
+                if res.statusCode == 200
+                    msg.send("/me is deploying #{projectName} from #{env}.")
+                else
+                    msg.send("/me could not start the build for some reason. Build Id is #{buildId}")
+        return true
+
+    # DEPLOY TRUNK
+    robot.respond /deploy (.*)/i, (msg) ->
         query = msg.match[1]
 
-        # only process messages that are for trunk
-        if query.indexOf("branch") > -1 and query.indexOf("help") > -1
-
+        isDeployBranch = query.indexOf "branch" > -1
+        isDeployHelp = query.indexOf "help" > -1
+        if !isDeployBranch and !isDeployHelp
             if query == "all"
-                ###
-                console.log "deploy trunk all (disabled)"
-                for projectName, buildId of testMap
-                    console.log "deploy", projectName, buildId
-                    url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
-                    headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
-                    msg.http(url)
-                        .headers(headers)
-                        .get() (err, res, body) ->
-                         if res.statusCode == 200
-                                msg.send("/me is deploying #{projectName} from trunk.")
-                            elset
-                                msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
-                ###
+                for projectName, buildId of testMap # FIXME: set it to actual map
+                    add2Queue(msg, projectName, buildId, env = "trunk")
             else
-                buildId = trunkMap[query]
-                projectName = query
-                if projectName? and buildId?
-                    console.log "deploy trunk", projectName, buildId
-                    url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
-                    headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
-                    msg.http(url)
-                        .headers(headers)
-                        .get() (err, res, body) ->
-                            if res.statusCode == 200
-                                msg.send("/me is deploying #{projectName} from trunk.")
-                            else
-                                msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+                if (projectName = query)? and (buildId = trunkMap[query])?
+                    add2Queue(msg, projectName, buildId, env = "trunk")
                 else
                     msg.send("/me cannot find project '#{projectName}'")
         return true
@@ -94,53 +88,27 @@ module.exports = (robot) ->
 
     # DEPLOY BRANCH
     robot.respond /deploy branch (.*)/i, (msg) ->
-        username = process.env.HUBOT_TEAMCITY_USERNAME
-        password = process.env.HUBOT_TEAMCITY_PASSWORD
-        hostname = process.env.HUBOT_TEAMCITY_HOSTNAME
-        scheme = process.env.HUBOT_TEAMCITY_SCHEME || "http"
-        base_url = "#{scheme}://#{hostname}"
         query = msg.match[1]
 
         if query == "all"
-            console.log "deploy branch all (disabled)"
-            ###
-            for projectName, buildId of branchMap
-                console.log "deploy", projectName, buildId
-                url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
-                headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
-                msg.http(url)
-                    .headers(headers)
-                    .get() (err, res, body) ->
-                        if res.statusCode == 200
-                            msg.send("/me is deploying #{projectName} from branch.")
-                        else
-                            msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
-            ###
+            for projectName, buildId of testMap # FIXME: set it to actual map
+                add2Queue msg, projectName, buildId, env = "branch"
         else
-            buildId = branchMap[query]
-            projectName = query
-            if projectName? and buildId?
-                console.log "deploy branch", projectName, buildId
-                url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
-                headers = Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}", Accept: "application/json"
-                msg.http(url)
-                    .headers(headers)
-                    .get() (err, res, body) ->
-                        if res.statusCode == 200
-                            msg.send("/me is deploying #{projectName} from branch.")
-                        else
-                            msg.send("/me failed! Something went wrong. Couldn't start the build for some reason. Build Id is #{buildId}")
+            if (projectName = query)? and (buildId = branchMap[query])?
+                add2Queue msg, projectName, buildId, env = "branch"
             else
-                msg.send("/me cannot find project 'branch #{projectName}'")
+                msg.send "/me cannot find project '#{projectName}'"
+
         return true
 
     # DEPLOY HELP
     robot.respond /deploy help/i, (msg) ->
         help = ""
         for projectName, buildId of trunkMap
+            help += "deploy all \n"
             help += "deploy " + projectName + "\n"
         for projectName, buildId of branchMap
+            help += "deploy branch all \n"
             help += "deploy branch " + projectName + "\n"
-
         msg.send("/quote " + help)
         return true
