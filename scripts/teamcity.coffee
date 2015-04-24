@@ -57,7 +57,7 @@ module.exports = (robot) ->
         hostname = process.env.HUBOT_TEAMCITY_HOSTNAME
         scheme = process.env.HUBOT_TEAMCITY_SCHEME || "http"
         base_url = "#{scheme}://#{hostname}"
-        url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
+        url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}&moveToTop=true"
         headers =
             Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}"
             Accept: "application/json"
