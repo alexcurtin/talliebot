@@ -73,7 +73,7 @@ module.exports = (robot) ->
 
     # RESPOND TO DEPLOY
     robot.respond /deploy (.*)/i, (msg) ->
-        query = msg.match[1]
+        query = msg.match[1].trim()
 
         isBranch = query.match(/branch (.*)/i)?
         if isBranch
