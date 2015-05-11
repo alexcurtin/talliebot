@@ -14,6 +14,7 @@
 # Commands:
 #   hubot twitter <twitter username> - Show last tweet from <twitter username>
 #   hubot twitter <twitter username> <n> - Cycle through tweet with <n> starting w/ latest
+#   hubot foodtrucks - Get the list of the foodtrucks at gfoodlounge
 #
 # Author:
 #   KevinTraver
