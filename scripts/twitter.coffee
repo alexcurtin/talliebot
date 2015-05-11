@@ -60,7 +60,7 @@ module.exports = (robot) ->
       return msg.send _.unescape(_.last(reply)['text']) if reply[0]['text']
 
   # Get menu for gfoodtrucks
-  robot.respond /(foodtrucks)\s+(\S+)\s?(\d?)/i, (msg) ->
+  robot.respond /foodtrucks/i, (msg) ->
     unless config.consumer_key
       msg.send "Please set the HUBOT_TWITTER_CONSUMER_KEY environment variable."
       return
