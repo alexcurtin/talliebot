@@ -81,6 +81,9 @@ module.exports = (robot) ->
     username = "gloungesf"
     count = 1
 
+    # FIXME: Turn twitter mentiones to links in the tweet
+    # str = str.replace(/(@[A-Z])\w+/g, '<a href="http://twitter.com/$&>$&</a>')
+
     twit.get "statuses/user_timeline",
       screen_name: escape(username)
       count: count
