@@ -97,12 +97,12 @@ module.exports = (robot) ->
 
         # GET SOURCE [branch|trunk]
 
-        if query.match(/branch (.*)/i)?
-            query = query.replace(/^branch /g, '')
+        if query.match(/branch/i)?
+            query = query.replace(/branch/i, '').trim()
             source = SOURCE.Branch
 
-        else if query.match(/trunk (.*)/i)?
-            query = query.replace(/^trunk /g, '')
+        else if query.match(/trunk/i)?
+            query = query.replace(/trunk/i, '').trim()
             source = SOURCE.Trunk
 
         else
@@ -112,17 +112,17 @@ module.exports = (robot) ->
 
         # GET ENVIRONMENT [alpha|staging]
 
-        if query.match(/alpha (.*)/i)?
-            query = query.replace(/^alpha /g, '') # clean up query
+        if query.match(/alpha/i)?
+            query = query.replace(/alpha/i, '').trim()
             env = ENV.Alpha
 
-        else if query.match(/staging (.*)/i)?
-            query = query.replace(/^staging /g, '') # clean up query
+        else if query.match(/staging/i)?
+            query = query.replace(/staging/i, '').trim()
             env = ENV.Staging
 
         else
             # set default env to Alpha if deploying from trunk, to Staging if deploying from branch
-            if source == SOURCE.Trunk then env = ENV.Alpha else ENV.Staging
+            env = if source == SOURCE.Trunk then ENV.Alpha else ENV.Staging
 
 
         # SET MAPPING
