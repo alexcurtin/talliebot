@@ -11,8 +11,8 @@
 #     HUBOT_TEAMCITY_SCHEME = <http || https> defaults to http if not set.
 #
 # Commands:
-#     hubot deploy [trunk|branch] all [alpha|staging] - Deploy all projects from trunk to alpha
-#     hubot deploy [trunk|branch] [cloud|db|marketing|web|viselde] [alpha|staging] - Deploy a projects from trunk
+#     hubot deploy [trunk|branch] all [alpha|staging] - Deploy all projects
+#     hubot deploy [trunk|branch] [cloud|db|marketing|web|viselde] [alpha|staging] - Deploy a specific project
 #
 # Author:
 #     Kevin Van Heusen
