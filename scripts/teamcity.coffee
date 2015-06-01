@@ -29,7 +29,7 @@ module.exports = (robot) ->
         'marketing': 'bt102'
         'web': 'bt87'
         'viselde': 'Deploy_DeployViseldeAlpha'
-        'test': 'test trunk2alpha' #FIXME
+        #'test': 'test trunk2alpha' #FIXME
 
     # BRANCH TO ALPHA PROJECT MAPPING
     branchToAlphaMap =
@@ -38,7 +38,7 @@ module.exports = (robot) ->
         'marketing': 'DeployBranchAlpha_DeployMarketing'
         'web': 'DeployBranchAlpha_DeployTallieWeb'
         'viselde': 'DeployBranchAlpha_DeployViseldeAlpha'
-        'test': 'test branch2alpha' #FIXME
+        #'test': 'test branch2alpha' #FIXME
 
     # BRANCH TO STAGING PROJECT MAPPING
     branchToStagingMap =
@@ -47,14 +47,7 @@ module.exports = (robot) ->
         'marketing': 'DeployBranch_DeployMarketing'
         'web': 'DeployBranch_DeployTallieWeb'
         'viselde': 'DeployBranch_DeployViseldeAlpha'
-        'test': 'test branch2staging' #FIXME
-
-    #FIXME
-    testMap =
-        'cloud': 'test1'
-        'db': 'test2'
-        'marketing': 'test3'
-        'web': 'test4'
+        #'test': 'test branch2staging' #FIXME
 
 
     # ENUMS
@@ -86,7 +79,7 @@ module.exports = (robot) ->
             .headers(headers)
             .get() (err, res, body) ->
                 if res.statusCode == 200
-                    msg.send("@all Deploying #{source} #{projectName} to #{env}.")
+                    msg.send("/me is deploying #{projectName} from #{source} to #{env}. @all")
                 else
                     msg.send("/me cannot start the build for some reason. Build Id is #{buildId}.")
         return true
@@ -136,7 +129,7 @@ module.exports = (robot) ->
                 map = null
                 # Send warning
                 console.log "Warning: Deploying from trunk to staging is disabled."
-                msg.send("/me cannot deploy '#{projectName}'. Deploy from trunk to staging is disabled.")
+                msg.send("/me cannot deploy '#{query}'. Deploy from trunk to staging is disabled.")
 
         else if source == SOURCE.Branch
 
@@ -152,7 +145,6 @@ module.exports = (robot) ->
             console.log "deploy", "source:", source, "environment:", env, "project:", query
 
             if query == "all"
-                map = testMap #FIXME
                 for projectName, buildId of map
                     add2Queue(msg, projectName, buildId, source, env)
 
