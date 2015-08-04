@@ -12,7 +12,7 @@
 #
 # Commands:
 #     hubot deploy [trunk|branch] all [alpha|staging] - Deploy all projects
-#     hubot deploy [trunk|branch] [cloud|db|marketing|web|viselde] [alpha|staging] - Deploy a specific project
+#     hubot deploy [trunk|branch] [cloud|db|marketing|web|viselde|furiosa] [alpha|staging] - Deploy a specific project
 #
 # Author:
 #     Kevin Van Heusen
@@ -29,6 +29,7 @@ module.exports = (robot) ->
         'marketing': 'bt102'
         'web': 'bt87'
         'viselde': 'Deploy_DeployViseldeAlpha'
+        'furiosa': 'Deploy_DeployFuriosaWeb'
         #'test': 'test trunk2alpha' #FIXME
 
     # BRANCH TO ALPHA PROJECT MAPPING
