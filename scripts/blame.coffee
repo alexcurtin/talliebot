@@ -19,8 +19,6 @@ module.exports = (robot) ->
     blames = [
       "/me shamefully sits there and silently takes the blame."
     ,
-      "Oscar Wilde told me to do it!"
-    ,
       "Oh. That was my bad. I'm sorry."
     ,
       "I did it but I'm blaming you."
@@ -46,6 +44,12 @@ module.exports = (robot) ->
       "(areyoukiddingme)"
     ,
       "(tableflip)"
+    ,
+      "(expensify)"
+    ,
+      "Sorry I got caught up watching Youtube videos of cats falling off things."
+    ,
+      "It's because my DeLorean was stolen at a Supertramp concert"
     ]
     blame = blames[Math.floor( Math.random() * blames.length)]
     msg.send blame

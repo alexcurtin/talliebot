@@ -11,18 +11,8 @@
 #     HUBOT_TEAMCITY_SCHEME = <http || https> defaults to http if not set.
 #
 # Commands:
-#     hubot deploy all - Deploy all projects from trunk
-#     hubot deploy cloud - Deploy cloud from trunk
-#     hubot deploy db - Deploy database from trunk
-#     hubot deploy marketing - Deploy marketing from trunk
-#     hubot deploy web - Deploy web from trunk
-#     hubot deploy viselde - Deploy viselde from trunk
-#     hubot deploy branch all - Deploy all projects from branch
-#     hubot deploy branch cloud - Deploy cloud from branch
-#     hubot deploy branch db - Deploy database from branch
-#     hubot deploy branch marketing - Deploy marketing from branch
-#     hubot deploy branch web - Deploy web from branch
-#     hubot deploy branch viselde - Deploy viselde from branch
+#     hubot deploy [trunk|branch] all [alpha|staging] - Deploy all projects
+#     hubot deploy [trunk|branch] [cloud|db|marketing|web|viselde|furiosa] [alpha|staging] - Deploy a specific project
 #
 # Author:
 #     Kevin Van Heusen
@@ -32,24 +22,48 @@ _ = require 'underscore'
 
 module.exports = (robot) ->
 
-    # TRUNK PROJECT MAPPING
-    trunkMap =
+    # TRUNK TO ALPHA PROJECT MAPPING
+    trunkToAlphaMap =
         'cloud': 'bt88'
         'db': 'bt89'
         'marketing': 'bt102'
         'web': 'bt87'
         'viselde': 'Deploy_DeployViseldeAlpha'
+        'furiosa': 'Deploy_DeployFuriosaWeb'
+        #'test': 'test trunk2alpha' #FIXME
 
-    # BRANCH PROJECT MAPPING
-    branchMap =
+    # BRANCH TO ALPHA PROJECT MAPPING
+    branchToAlphaMap =
+        'cloud': 'DeployBranchAlpha_DeployTallieCloud'
+        'db': 'DeployBranchAlpha_DeployTallieDb'
+        'marketing': 'DeployBranchAlpha_DeployMarketing'
+        'web': 'DeployBranchAlpha_DeployTallieWeb'
+        'viselde': 'DeployBranchAlpha_DeployViseldeAlpha'
+        #'test': 'test branch2alpha' #FIXME
+
+    # BRANCH TO STAGING PROJECT MAPPING
+    branchToStagingMap =
         'cloud': 'DeployBranch_DeployTallieCloud'
         'db': 'DeployBranch_DeployTallieDb'
         'marketing': 'DeployBranch_DeployMarketing'
         'web': 'DeployBranch_DeployTallieWeb'
         'viselde': 'DeployBranch_DeployViseldeAlpha'
+        #'test': 'test branch2staging' #FIXME
+
+
+    # ENUMS
+
+    SOURCE =
+        Trunk: "trunk"
+        Branch: "branch"
+
+    ENV =
+        Alpha: "alpha"
+        Staging: "staging"
+
 
     # ADD PROJECT 2 QUEUE
-    add2Queue = (msg, projectName, buildId, env) =>
+    add2Queue = (msg, projectName, buildId, source, env) =>
         console.log "add2Queue", projectName, buildId, env
 
         username = process.env.HUBOT_TEAMCITY_USERNAME
@@ -57,7 +71,7 @@ module.exports = (robot) ->
         hostname = process.env.HUBOT_TEAMCITY_HOSTNAME
         scheme = process.env.HUBOT_TEAMCITY_SCHEME || "http"
         base_url = "#{scheme}://#{hostname}"
-        url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}"
+        url = "#{base_url}/httpAuth/action.html?add2Queue=#{buildId}&moveToTop=true"
         headers =
             Authorization: "Basic #{new Buffer("#{username}:#{password}").toString("base64")}"
             Accept: "application/json"
@@ -66,31 +80,79 @@ module.exports = (robot) ->
             .headers(headers)
             .get() (err, res, body) ->
                 if res.statusCode == 200
-                    msg.send("/me is deploying #{projectName} from #{env}.")
+                    msg.send("/me is deploying #{projectName} from #{source} to #{env}. @all")
                 else
                     msg.send("/me cannot start the build for some reason. Build Id is #{buildId}.")
         return true
 
     # RESPOND TO DEPLOY
     robot.respond /deploy (.*)/i, (msg) ->
-        query = msg.match[1]
+        query = msg.match[1].trim()
 
-        isBranch = query.match(/branch (.*)/i)?
-        if isBranch
-            query = query.replace(/^branch /g, '')
-            map = branchMap
-            env = "branch"
-        else
-            map = trunkMap
-            env = "trunk"
-        console.log("deploy: isBranch " + isBranch + " query " + query + " env " + env)
+        # GET SOURCE [branch|trunk]
 
-        if query == "all"
-            for projectName, buildId of map
-                add2Queue(msg, projectName, buildId, env)
+        if query.match(/branch/i)?
+            query = query.replace(/branch/i, '').trim()
+            source = SOURCE.Branch
+
+        else if query.match(/trunk/i)?
+            query = query.replace(/trunk/i, '').trim()
+            source = SOURCE.Trunk
+
         else
-            if (projectName = query)? and (buildId = map[query])?
-                add2Queue(msg, projectName, buildId, env)
+            # set default source to trunk
+            source = SOURCE.Trunk
+
+
+        # GET ENVIRONMENT [alpha|staging]
+
+        if query.match(/alpha/i)?
+            query = query.replace(/alpha/i, '').trim()
+            env = ENV.Alpha
+
+        else if query.match(/staging/i)?
+            query = query.replace(/staging/i, '').trim()
+            env = ENV.Staging
+
+        else
+            # set default env to Alpha if deploying from trunk, to Staging if deploying from branch
+            env = if source == SOURCE.Trunk then ENV.Alpha else ENV.Staging
+
+
+        # SET MAPPING
+
+        if source == SOURCE.Trunk
+
+            if env == ENV.Alpha
+                map = trunkToAlphaMap
+
+            else if env == ENV.Staging
+                map = null
+                # Send warning
+                console.log "Warning: Deploying from trunk to staging is disabled."
+                msg.send("/me cannot deploy '#{query}'. Deploy from trunk to staging is disabled.")
+
+        else if source == SOURCE.Branch
+
+            if env == ENV.Alpha
+                map = branchToAlphaMap
+
+            else if env == ENV.Staging
+                map = branchToStagingMap
+
+
+        # KICK OFF DEPLOY REQUEST
+        if map?
+            console.log "deploy", "source:", source, "environment:", env, "project:", query
+
+            if query == "all"
+                for projectName, buildId of map
+                    add2Queue(msg, projectName, buildId, source, env)
+
             else
-                msg.send("/me cannot find project '#{projectName}'")
+                if (projectName = query)? and (buildId = map[query])?
+                    add2Queue(msg, projectName, buildId, source, env)
+                else
+                    msg.send("/me cannot find project '#{projectName}'")
+
         return true
